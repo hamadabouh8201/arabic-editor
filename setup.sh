@@ -1,12 +1,13 @@
 #!/bin/bash
-# setup.sh: يثبت Ghidra 12.1.4 و REA (rea-agents@6.10.1) و mingw-w64 و Wine
+# setup.sh: يثبت Ghidra 12.2 و REA (rea-agents@6.10.1) و mingw-w64 و Wine
 # ويشغّل Wine على الشاشة الافتراضية (Xvfb :99). مصمم لينتهي في أقل من 5 دقائق:
 # التنزيلات الثلاثة (apt و Ghidra و npm) تعمل بالتوازي.
 set -euo pipefail
 
-GHIDRA_VERSION="12.1.4"
+# rea-agents 6.10.1 يرفض أي Ghidra أقدم من 12.2 (unsupported_version)
+GHIDRA_VERSION="12.2"
 GHIDRA_TAG="Ghidra_${GHIDRA_VERSION}_build"
-GHIDRA_FALLBACK_ZIP="ghidra_${GHIDRA_VERSION}_PUBLIC_20260921.zip"
+GHIDRA_FALLBACK_ZIP="ghidra_${GHIDRA_VERSION}_PUBLIC_20261016.zip"
 GHIDRA_INSTALL_DIR="/opt/ghidra"
 REA_VERSION="6.10.1"
 DISPLAY_NUM=":99"
@@ -26,7 +27,7 @@ install_apt() {
   DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y -qq --no-install-recommends "${pkgs[@]}"
 }
 
-# 2) Ghidra 12.1.4 من إصدارات GitHub الرسمية
+# 2) Ghidra 12.2 من إصدارات GitHub الرسمية (يستبدل أي إصدار آخر في /opt/ghidra)
 install_ghidra() {
   if [ -x "$GHIDRA_INSTALL_DIR/support/analyzeHeadless" ] &&
      grep -q "application.version=$GHIDRA_VERSION" "$GHIDRA_INSTALL_DIR/Ghidra/application.properties"; then

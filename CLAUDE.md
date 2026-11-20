@@ -10,7 +10,7 @@
 - لا تجمع خطوات كثيرة في commit واحد، ولا تترك عملا غير محفوظ عند انتهاء الجلسة.
 
 ## الأدوات
-- `setup.sh` يثبّت Ghidra 12.1.4 و REA (`rea-agents@6.10.1`) و mingw-w64 و Wine،
+- `setup.sh` يثبّت Ghidra 12.2 (أقدم إصدار يقبله `rea-agents@6.10.1`) و REA (`rea-agents@6.10.1`) و mingw-w64 و Wine،
   ويشغّل شاشة افتراضية (Xvfb على `:99`).
 - `.mcp.json` يسجّل خادم REA ويمرّر له `GHIDRA_INSTALL_DIR=/opt/ghidra`.
 - آخر إصدار من `rea-agents` على npm عند كتابة هذا الملف: 6.10.1
