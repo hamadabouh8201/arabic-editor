@@ -75,7 +75,8 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 $SUDO mkdir -p "$XDG_RUNTIME_DIR" && $SUDO chown "$(id -u):$(id -g)" "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
 export WINEDEBUG=-all WINEDLLOVERRIDES="mscoree,mshtml="
 timeout 120 wineboot --init >"$LOG_DIR/wineboot.log" 2>&1
-wineserver -w || true
+# wineserver -w ينتظر خروج كل برامج Wine؛ المهلة تمنع التعليق إن كان برنامج مفتوحا
+timeout 30 wineserver -w || true
 log "Wine جاهز على $DISPLAY"
 
 # 5) فحص سريع
