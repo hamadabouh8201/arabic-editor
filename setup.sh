@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # setup.sh: يثبت Ghidra 12.1.4 و REA (rea-agents@6.10.1) و mingw-w64 و Wine
 # ويشغّل Wine على الشاشة الافتراضية (Xvfb :99). مصمم لينتهي في أقل من 5 دقائق:
 # التنزيلات الثلاثة (apt و Ghidra و npm) تعمل بالتوازي.
