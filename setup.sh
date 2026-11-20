@@ -6,7 +6,7 @@ set -euo pipefail
 
 GHIDRA_VERSION="12.1.4"
 GHIDRA_TAG="Ghidra_${GHIDRA_VERSION}_build"
-GHIDRA_FALLBACK_ZIP="ghidra_${GHIDRA_VERSION}_PUBLIC_20260911.zip"
+GHIDRA_FALLBACK_ZIP="ghidra_${GHIDRA_VERSION}_PUBLIC_20260921.zip"
 GHIDRA_INSTALL_DIR="/opt/ghidra"
 REA_VERSION="6.10.1"
 DISPLAY_NUM=":99"
@@ -19,7 +19,7 @@ log() { printf '[%3ds] %s\n' "$SECONDS" "$*"; }
 
 # 1) الحزم من apt: mingw-w64 و Wine و Xvfb (و Java 21 إن لم يكن موجودا)
 install_apt() {
-  local pkgs=(mingw-w64 wine wine64 xvfb unzip curl ca-certificates procps)
+  local pkgs=(mingw-w64 wine wine64 wine32:i386 xvfb unzip curl ca-certificates procps)
   java -version 2>&1 | grep -qE 'version "(2[1-9]|[3-9][0-9])' || pkgs+=(openjdk-21-jdk-headless)
   $SUDO dpkg --add-architecture i386 || true
   $SUDO apt-get update -qq
@@ -69,6 +69,9 @@ if ! xdpyinfo >/dev/null 2>&1 && ! pgrep -f "Xvfb $DISPLAY_NUM" >/dev/null; then
   for _ in $(seq 1 50); do [ -e "/tmp/.X11-unix/X${DISPLAY_NUM#:}" ] && break; sleep 0.1; done
 fi
 log "Xvfb يعمل على $DISPLAY"
+# Wine 9 من Ubuntu يتعطل (free(): invalid pointer) إن لم يوجد /run/user/<uid>
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+$SUDO mkdir -p "$XDG_RUNTIME_DIR" && $SUDO chown "$(id -u):$(id -g)" "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
 export WINEDEBUG=-all WINEDLLOVERRIDES="mscoree,mshtml="
 timeout 120 wineboot --init >"$LOG_DIR/wineboot.log" 2>&1
 wineserver -w || true
