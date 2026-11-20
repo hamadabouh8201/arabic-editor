@@ -12,6 +12,8 @@
 ## الأدوات
 - `setup.sh` يثبّت Ghidra 12.2 (أقدم إصدار يقبله `rea-agents@6.10.1`) و REA (`rea-agents@6.10.1`) و mingw-w64 و Wine،
   ويشغّل شاشة افتراضية (Xvfb على `:99`).
-- `.mcp.json` يسجّل خادم REA ويمرّر له `GHIDRA_INSTALL_DIR=/opt/ghidra`.
+- `.mcp.json` يسجّل خادم REA ويمرّر له `GHIDRA_INSTALL_DIR=/opt/ghidra`
+  و `JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64` (Ghidra 12.2 يحتاج JDK 25+،
+  و `setup.sh` يثبّت `openjdk-25-jdk-headless`).
 - آخر إصدار من `rea-agents` على npm عند كتابة هذا الملف: 6.10.1
   (تحقق منه بـ `npm view rea-agents version`).

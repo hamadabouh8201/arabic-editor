@@ -4,7 +4,8 @@
       "command": "npx",
       "args": ["-y", "rea-agents@6.10.1", "mcp"],
       "env": {
-        "GHIDRA_INSTALL_DIR": "/opt/ghidra"
+        "GHIDRA_INSTALL_DIR": "/opt/ghidra",
+        "JAVA_HOME": "/usr/lib/jvm/java-25-openjdk-amd64"
       }
     }
   }

@@ -9,6 +9,7 @@ GHIDRA_VERSION="12.2"
 GHIDRA_TAG="Ghidra_${GHIDRA_VERSION}_build"
 GHIDRA_FALLBACK_ZIP="ghidra_${GHIDRA_VERSION}_PUBLIC_20261016.zip"
 GHIDRA_INSTALL_DIR="/opt/ghidra"
+JAVA25_HOME="/usr/lib/jvm/java-25-openjdk-amd64"
 REA_VERSION="6.10.1"
 DISPLAY_NUM=":99"
 LOG_DIR="${TMPDIR:-/tmp}/setup-logs"
@@ -21,7 +22,8 @@ log() { printf '[%3ds] %s\n' "$SECONDS" "$*"; }
 # 1) الحزم من apt: mingw-w64 و Wine و Xvfb (و Java 21 إن لم يكن موجودا)
 install_apt() {
   local pkgs=(mingw-w64 wine wine64 wine32:i386 xvfb unzip curl ca-certificates procps)
-  java -version 2>&1 | grep -qE 'version "(2[1-9]|[3-9][0-9])' || pkgs+=(openjdk-21-jdk-headless)
+  # Ghidra 12.2 يحتاج JDK 25 أو أحدث (REA يرفض JDK 21)
+  [ -x "$JAVA25_HOME/bin/java" ] || pkgs+=(openjdk-25-jdk-headless)
   $SUDO dpkg --add-architecture i386 || true
   $SUDO apt-get update -qq
   DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y -qq --no-install-recommends "${pkgs[@]}"
@@ -81,6 +83,7 @@ log "Wine جاهز على $DISPLAY"
 
 # 5) فحص سريع
 log "Ghidra: $(grep application.version= "$GHIDRA_INSTALL_DIR/Ghidra/application.properties")"
+log "Java لـ Ghidra: $("$JAVA25_HOME/bin/java" -version 2>&1 | grep -m1 ' version ')"
 log "REA: $(rea --version 2>/dev/null | head -1)"
 log "mingw-w64: $(x86_64-w64-mingw32-gcc --version | head -1)"
 log "Wine: $(wine --version)"
